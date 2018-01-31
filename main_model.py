@@ -1,6 +1,6 @@
 """
 Mask R-CNN implementation
-auteur: Thanh-Tu
+author: Thanh-Tu
 credited by: https://github.com/matterport/Mask_RCNN
 """
 
@@ -29,30 +29,17 @@ import utils
 
 from resnet_graph import identity_block, conv_block, resnet_graph
 from roi_align import *
-
+from data_generator import *
+from loss import *
+from net import *
+from proposal_layer import *
+from detection_layer import *
 
 # Requires TensorFlow 1.3+ and Keras 2.0.8+.
 from distutils.version import LooseVersion
 assert LooseVersion(tf.__version__) >= LooseVersion("1.3")
 assert LooseVersion(keras.__version__) >= LooseVersion('2.0.8')
 
-
-############################################################
-#  Utility Functions
-############################################################
-
-class BatchNorm(KL.BatchNormalization):
-    """Batch Normalization class. Subclasses the Keras BN class and
-    hardcodes training=False so the BN layer doesn't update
-    during training.
-
-    Batch normalization has a negative effect on training if batches are small
-    so we disable it here.
-    """
-
-    def call(self, inputs, training=None):
-        return super(self.__class__, self).call(inputs, training=False)
-    
 
 ############################################################
 #  MaskRCNN Class
@@ -94,8 +81,9 @@ class MaskRCNN():
 
         # Inputs
         input_image = KL.Input(
-            shape=config.IMAGE_SHAPE.tolist(), name="input_image")
+                        shape=config.IMAGE_SHAPE.tolist(), name="input_image")
         input_image_meta = KL.Input(shape=[None], name="input_image_meta")
+        
         if mode == "training":
             # RPN GT
             input_rpn_match = KL.Input(
