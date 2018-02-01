@@ -3,6 +3,29 @@ Mask R-CNN implementation
 auteur: Thanh-Tu
 credited by: https://github.com/matterport/Mask_RCNN
 """
+import os
+import sys
+import glob
+import random
+import math
+import datetime
+import itertools
+import json
+import re
+import logging
+from collections import OrderedDict
+import numpy as np
+import scipy.misc
+import tensorflow as tf
+import keras
+import keras.backend as K
+import keras.layers as KL
+import keras.initializers as KI
+import keras.engine as KE
+import keras.models as KM
+
+import utils
+
 
 
 ############################################################
